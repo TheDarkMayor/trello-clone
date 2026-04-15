@@ -1,0 +1,159 @@
+:root {
+  --c-indigo: #6366f1;
+  --c-indigo-dark: #4f46e5;
+  --c-violet: #8b5cf6;
+  --c-sky: #38bdf8;
+  --c-pink: #f472b6;
+  --c-cyan: #06b6d4;
+  --c-green: #22c55e;
+  --c-red: #f87171;
+  --c-amber: #fbbf24;
+
+  --grad-brand: linear-gradient(135deg, var(--c-indigo) 0%, var(--c-violet) 50%, var(--c-cyan) 100%);
+  --grad-bg: linear-gradient(135deg, #0f0c29 0%, #1a1040 40%, #0d1b3e 100%);
+
+  --surface-menu: rgba(13, 16, 45, 0.95);
+  --surface-page: #090a1d;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(129, 140, 248, 0.7);
+
+  --text-primary: #f5f7ff;
+  --text-secondary: rgba(232, 236, 255, 0.72);
+  --text-muted: rgba(232, 236, 255, 0.42);
+  --text-dark: #1e1b4b;
+  --text-card: #27264e;
+
+  --shadow-glow: 0 0 0 3px rgba(99, 102, 241, 0.22);
+  --shadow-card: 0 8px 18px rgba(8, 10, 30, 0.18);
+  --shadow-card-hover: 0 18px 34px rgba(8, 10, 30, 0.26);
+  --shadow-md: 0 16px 32px rgba(8, 10, 30, 0.28);
+  --shadow-lg: 0 24px 56px rgba(8, 10, 30, 0.4);
+
+  --r-xs: 4px;
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 16px;
+  --r-xl: 20px;
+  --r-2xl: 28px;
+  --r-full: 9999px;
+
+  --t-fast: 0.15s ease;
+  --t-base: 0.22s ease;
+
+  --header-h: 52px;
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--grad-bg);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: var(--r-full);
+  background: rgba(129, 140, 248, 0.28);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(129, 140, 248, 0.48);
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+
+  40%,
+  100% {
+    left: 150%;
+  }
+}
+
+@keyframes gradShift {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
