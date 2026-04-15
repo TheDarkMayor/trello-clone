@@ -8,10 +8,12 @@ export default function SearchBar({ boardId, labels, members, onFilterChange }) 
   const [showResults, setShowResults] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [filterPosition, setFilterPosition] = useState(null);
+  const [searchPosition, setSearchPosition] = useState(null);
   const [filters, setFilters] = useState({ label_ids: [], member_ids: [], due: '' });
   const filterRef = useRef(null);
   const filterDropdownRef = useRef(null);
   const searchRef = useRef(null);
+  const searchDropdownRef = useRef(null);
 
   const hasFilters = filters.label_ids.length > 0 || filters.member_ids.length > 0 || filters.due;
 
@@ -40,7 +42,9 @@ export default function SearchBar({ boardId, labels, members, onFilterChange }) 
       const clickedFilterTrigger = filterRef.current?.contains(e.target);
       const clickedFilterDropdown = filterDropdownRef.current?.contains(e.target);
       if (!clickedFilterTrigger && !clickedFilterDropdown) setShowFilter(false);
-      if (searchRef.current && !searchRef.current.contains(e.target)) setShowResults(false);
+      const clickedSearch = searchRef.current?.contains(e.target);
+      const clickedSearchDropdown = searchDropdownRef.current?.contains(e.target);
+      if (!clickedSearch && !clickedSearchDropdown) setShowResults(false);
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
@@ -55,19 +59,39 @@ export default function SearchBar({ boardId, labels, members, onFilterChange }) 
     });
   }, []);
 
+  const updateSearchPosition = useCallback(() => {
+    if (!searchRef.current) return;
+    const rect = searchRef.current.getBoundingClientRect();
+    setSearchPosition({
+      top: rect.bottom + 8,
+      left: rect.left,
+      width: Math.max(rect.width, 280),
+    });
+  }, []);
+
   useEffect(() => {
     if (!showFilter) return undefined;
     updateFilterPosition();
-
     const handleViewportChange = () => updateFilterPosition();
     window.addEventListener('resize', handleViewportChange);
     window.addEventListener('scroll', handleViewportChange, true);
-
     return () => {
       window.removeEventListener('resize', handleViewportChange);
       window.removeEventListener('scroll', handleViewportChange, true);
     };
   }, [showFilter, updateFilterPosition]);
+
+  useEffect(() => {
+    if (!showResults) return undefined;
+    updateSearchPosition();
+    const handleViewportChange = () => updateSearchPosition();
+    window.addEventListener('resize', handleViewportChange);
+    window.addEventListener('scroll', handleViewportChange, true);
+    return () => {
+      window.removeEventListener('resize', handleViewportChange);
+      window.removeEventListener('scroll', handleViewportChange, true);
+    };
+  }, [showResults, updateSearchPosition]);
 
   const toggleLabel = (id) => {
     setFilters((prev) => ({
@@ -122,25 +146,30 @@ export default function SearchBar({ boardId, labels, members, onFilterChange }) 
           )}
         </div>
 
-        {showResults && results.length > 0 && (
-          <div className="search-results-dropdown">
-            {results.map((card) => (
+      </div>
+
+      {showResults && searchPosition && createPortal(
+        <>
+          <div className="filter-backdrop" onClick={() => setShowResults(false)} />
+          <div
+            ref={searchDropdownRef}
+            className="search-results-dropdown"
+            style={{ position: 'fixed', top: searchPosition.top, left: searchPosition.left, width: searchPosition.width, zIndex: 1000 }}
+          >
+            {results.length > 0 ? results.map((card) => (
               <div key={card.id} className="search-result-item">
                 <div className="sr-title">{card.title}</div>
                 <div className="sr-list">in {card.list_title}</div>
               </div>
-            ))}
+            )) : (
+              <div className="search-result-item">
+                <div className="sr-list">No cards found</div>
+              </div>
+            )}
           </div>
-        )}
-
-        {showResults && query && results.length === 0 && (
-          <div className="search-results-dropdown">
-            <div className="search-result-item">
-              <div className="sr-list">No cards found</div>
-            </div>
-          </div>
-        )}
-      </div>
+        </>,
+        document.body,
+      )}
 
       <div className="filter-bar popover-wrapper" ref={filterRef}>
         <button
