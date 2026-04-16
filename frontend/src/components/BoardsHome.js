@@ -48,9 +48,7 @@ export default function BoardsHome() {
         <div className="boards-intro">
           <span className="boards-kicker">Workspace overview</span>
           <h1 className="boards-title">Your boards</h1>
-          <p className="boards-subtitle">
-            The login page palette, glass surfaces, and motion now carry across every dashboard entry point.
-          </p>
+
         </div>
 
         <div className="boards-grid">
